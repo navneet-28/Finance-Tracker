@@ -14,7 +14,7 @@ export default function Navigation() {
         <div className='user-con'>
             <img src={avatar} alt=''/>
             <h2>Navneet</h2>
-            <p>Your money</p>
+           
         </div>
         {/* <ul className='menu-items'>
             {menuItems.map((item) => (

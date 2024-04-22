@@ -5,15 +5,14 @@ const ExpenseSchema = require('../models/ExpenseModel');
 exports.addExpense = async (req, res) => {
     console.log(req.body)
     try {
-        const {title, amount, category, date, description} = req.body;
+        const {title, amount, date, description} = req.body;
         const expense = new ExpenseSchema({
             title,
             amount,
-            category,
             date,
             description
         });
-        if(!title || !amount || !category || !date){
+        if(!title || !amount || !date){
             console.log("All fields are required!")
             return res.status(400).json({msg: 'Please fill all the fields'});
         }
@@ -23,7 +22,7 @@ exports.addExpense = async (req, res) => {
         }
         await expense.save();
         res.status(200).json({msg: 'Expense added successfully'});
-        console.log("Income saved")
+        console.log("Expense saved")
     } catch (error) {
         console.error(error);
         res.status(500).json({msg: 'Server error'});

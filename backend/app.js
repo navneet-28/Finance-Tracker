@@ -9,8 +9,13 @@ require('dotenv').config();
 
 const PORT = process.env.PORT || 5000;
 
+const corsOptions = {
+    origin: 'http://localhost:3000', // Specify the client origin
+    credentials: true, // Enable cookies and other credentials
+  };
+
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 //routes
 readdirSync('./routes').map((r)=> app.use('/api', require(`./routes/${r}`)));

@@ -5,12 +5,13 @@ const IncomeSchema = require("../models/incomeModel");
 exports.addIncome = async (req, res) => {
     console.log(req.body)
     try {
-        const {title, amount, date, description} = req.body;
+        const {title, amount, date, description, userEmail} = req.body;
         const income = new IncomeSchema({
             title,
             amount,
             date,
-            description
+            description,
+            userEmail
         });
         if(!title || !amount || !date){
             console.log("All fields are required!")
@@ -30,8 +31,10 @@ exports.addIncome = async (req, res) => {
 }
 
 exports.getIncome = async (req, res) => {
+    console.log(req.query)
     try {
-        const income = await IncomeSchema.find().sort({createdAt: -1});
+        const {userEmail} = req.query;
+        const income = await IncomeSchema.find({userEmail}).sort({createdAt: -1});
         res.status(200).json(income);
     } catch (error) {
         console.error(error);

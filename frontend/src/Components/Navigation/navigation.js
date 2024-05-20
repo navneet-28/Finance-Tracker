@@ -2,18 +2,27 @@ import React from 'react'
 import { styled } from 'styled-components'
 import avatar from '../../images/avatar.png'
 import { menuItems } from '../../utils/menuItems'
-import { signout } from '../../utils/Icons'
+import { logout } from '../../utils/Icons'
 import { useGlobalContext } from '../../context/globalContext'
 import { InnerLayout } from '../../styles/Layouts'
 import { dollar } from '../../utils/Icons'
+import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navigation() {
     const {totalIncome, totalExpenses, totalBalance} = useGlobalContext()
+    const { auth, setAuth } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSignout = () => {
+        setAuth(null);
+        navigate('/login', { replace: true });
+    };
   return (
     <NavStyled>
         <div className='user-con'>
             <img src={avatar} alt=''/>
-            <h2>Navneet</h2>
+            <h2>{auth.name}</h2>
            
         </div>
         {/* <ul className='menu-items'>
@@ -50,7 +59,8 @@ export default function Navigation() {
         </InnerLayout>
         <div className='bottom-nav'>
             <li>
-                {signout} <span>Sign Out</span>
+                <button onClick={handleSignout}>
+                {logout} <span>Sign Out</span></button>
             </li>
         </div>
     </NavStyled>

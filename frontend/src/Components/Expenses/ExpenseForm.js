@@ -5,20 +5,24 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
 import { plus } from '../../utils/Icons';
+import useAuth from '../../hooks/useAuth';
 
 
 function ExpenseForm() {
     const {addExpense, error, setError, addIncome} = useGlobalContext()
+    const {auth} = useAuth()
+
     const [inputState, setInputState] = useState({
         title: '',
         amount: '',
         date: '',
         description: '',
+        userEmail: auth.email
     })
 
     const [type, setType] = useState('income');
 
-    const { title, amount, date, description } = inputState;
+    const { title, amount, date, description, userEmail } = inputState;
 
     const handleInput = name => e => {
         setInputState({...inputState, [name]: e.target.value})
@@ -26,6 +30,7 @@ function ExpenseForm() {
     }
 
     const handleSubmit = e => {
+        // console.log(inputState)
         e.preventDefault()
         if(type === 'income'){
             addIncome(inputState)
@@ -38,6 +43,7 @@ function ExpenseForm() {
             amount: '',
             date: '',
             description: '',
+            userEmail: auth.email
         })
     }
 
@@ -125,7 +131,7 @@ const ExpenseFormStyled = styled.form`
 
     .selects{
         display: flex;
-        justify-content: flex-end;
+        justify-content: flex;
         select{
             color: rgba(34, 34, 96, 0.4);
             &:focus, &:active{

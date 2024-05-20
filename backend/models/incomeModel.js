@@ -25,6 +25,10 @@ const IncomeSchema = new mongoose.Schema({
         maxLength: 200,
         trim: true
     },
+    userEmail:{
+        type: String,
+        required: true
+    }
     
 }, {timestamps: true});
 

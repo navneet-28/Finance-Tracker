@@ -8,10 +8,10 @@ router.get('/', (req, res) => {
     res.send('Transactions route: Hello World');
 });
 router.post('/addIncome', addIncome)
-    .get('/getIncome', getIncome)
+    .get('/getIncome/', getIncome)
     .delete('/deleteIncome/:id', deleteIncome)
     .post('/addExpense', addExpense)
-    .get('/getExpense', getExpense)
+    .get('/getExpense/', getExpense)
     .delete('/deleteExpense/:id', deleteExpense);
 
 module.exports = router;

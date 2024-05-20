@@ -5,12 +5,13 @@ const ExpenseSchema = require('../models/ExpenseModel');
 exports.addExpense = async (req, res) => {
     console.log(req.body)
     try {
-        const {title, amount, date, description} = req.body;
+        const {title, amount, date, description, userEmail} = req.body;
         const expense = new ExpenseSchema({
             title,
             amount,
             date,
-            description
+            description,
+            userEmail
         });
         if(!title || !amount || !date){
             console.log("All fields are required!")
@@ -18,7 +19,7 @@ exports.addExpense = async (req, res) => {
         }
         if(amount<=0 || !amount === Number){
             console.log("Amount should be a number greater than 0")
-            return res.status(400).json({msg: 'Amount should be a number greater than 0'});
+            return res.status(401).json({msg: 'Amount should be a number greater than 0'});
         }
         await expense.save();
         res.status(200).json({msg: 'Expense added successfully'});
@@ -30,8 +31,10 @@ exports.addExpense = async (req, res) => {
 }
 
 exports.getExpense = async (req, res) => {
+    console.log(req.query)
     try {
-        const expense = await ExpenseSchema.find().sort({createdAt: -1});
+        const {userEmail} = req.query;
+        const expense = await ExpenseSchema.find({userEmail}).sort({createdAt: -1});
         res.status(200).json(expense);
     } catch (error) {
         console.error(error);

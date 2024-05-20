@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react"
 import axios from 'axios'
+import useAuth from "../hooks/useAuth";
 
 
 const BASE_URL = "http://localhost:5000/api/";
@@ -9,23 +10,36 @@ const GlobalContext = React.createContext()
 
 export const GlobalProvider = ({children}) => {
 
+    const {auth, setAuth} = useAuth();
+
+
     const [incomes, setIncomes] = useState([])
     const [expenses, setExpenses] = useState([])
     const [error, setError] = useState(null)
 
+   
+
     //calculate incomes
     const addIncome = async (income) => {
+        // console.log(auth)
         const response = await axios.post(`${BASE_URL}addIncome`, income)
             .catch((err) =>{
-                setError(err.response.data.message)
+                alert(err.response.data.msg)
             })
         getIncomes()
     }
 
     const getIncomes = async () => {
-        const response = await axios.get(`${BASE_URL}getIncome`)
+        
+    const userEmail = auth.email;
+        // console.log("User Email is: ", userEmail)
+        const response = await axios.get(`${BASE_URL}getIncome`, {
+            params: {
+                userEmail: userEmail
+            }
+        })
         setIncomes(response.data)
-        console.log(response.data)
+        // console.log(response.data)
     }
 
     const deleteIncome = async (id) => {
@@ -45,17 +59,25 @@ export const GlobalProvider = ({children}) => {
 
     //calculate incomes
     const addExpense = async (income) => {
+        
         const response = await axios.post(`${BASE_URL}addExpense`, income)
             .catch((err) =>{
-                setError(err.response.data.message)
+                alert(err.response.data.msg)
             })
         getExpenses()
     }
 
     const getExpenses = async () => {
-        const response = await axios.get(`${BASE_URL}getExpense`)
+        
+    const userEmail = auth.email;
+        // console.log("User Email is: ", userEmail)
+        const response = await axios.get(`${BASE_URL}getExpense`,{
+            params: {
+                userEmail: userEmail
+            }
+        })
         setExpenses(response.data)
-        console.log(response.data)
+        // console.log(response.data)
     }
 
     const deleteExpense = async (id) => {

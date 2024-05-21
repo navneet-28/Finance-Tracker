@@ -21,30 +21,14 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Install dependencies for frontend
+      - name: npm install, build, and test
         run: |
-          cd frontend
           npm install
-
-      - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
-
-      - name: Install dependencies for backend
-        run: |
-          cd backend
-          npm install
-
-      - name: Test backend
-        run: |
-          cd backend
+          npm run build --if-present
           npm run test --if-present
 
-      - name: Zip backend for deployment
-        run: |
-          cd backend
-          zip -r ../release.zip .
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -59,7 +43,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # This is required for requesting the JWT
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -73,9 +57,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2F45D43C0650409CAB6722A3BB7B5A04 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8814EFC54AC944ADA5D008386BA5B3B8 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_76EAB909AC18460F910E785736B3413E }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B33258145FF54775B4816767EBFAEC0B }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_557B9BA2A6484EFBB8D76DAAC21A00C1 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_69D509242E86452381B189BC1613D37A }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -84,3 +68,4 @@ jobs:
           app-name: 'finance-tracker-app'
           slot-name: 'Production'
           package: .
+          

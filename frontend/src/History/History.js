@@ -40,7 +40,7 @@ function History() {
                                 type === 'expense' ? `-${amount <= 0 ? 0 : amount}` : `+${amount <= 0 ? 0: amount}`
                             }
                         </p>
-                        <a href='#' onClick={() => handleDelete(_id, type)}><p>{del}</p></a>
+                        <button  onClick={() => handleDelete(_id, type)}><p>{del}</p></button>
                         
                     </div>
                 )

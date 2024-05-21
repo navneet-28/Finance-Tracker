@@ -11,7 +11,7 @@ function Expenses() {
 
     useEffect(() =>{
         getExpenses()
-    }, [])
+    })
     return (
         <ExpenseStyled>
             <InnerLayout>

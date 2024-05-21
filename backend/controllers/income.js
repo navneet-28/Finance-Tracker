@@ -3,7 +3,7 @@ const IncomeSchema = require("../models/incomeModel");
 
 
 exports.addIncome = async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     try {
         const {title, amount, date, description, userEmail} = req.body;
         const income = new IncomeSchema({
@@ -31,7 +31,7 @@ exports.addIncome = async (req, res) => {
 }
 
 exports.getIncome = async (req, res) => {
-    console.log(req.query)
+    // console.log(req.query)
     try {
         const {userEmail} = req.query;
         const income = await IncomeSchema.find({userEmail}).sort({createdAt: -1});
@@ -43,7 +43,7 @@ exports.getIncome = async (req, res) => {
 }
 
 exports.deleteIncome = async (req, res) => {
-    console.log(req.params)
+    // console.log(req.params)
     try {
         const income = await IncomeSchema.findByIdAndDelete(req.params.id);
         res.status(200).json({msg: 'Income deleted successfully'});

@@ -3,7 +3,7 @@ const ExpenseSchema = require('../models/ExpenseModel');
 
 
 exports.addExpense = async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     try {
         const {title, amount, date, description, userEmail} = req.body;
         const expense = new ExpenseSchema({
@@ -31,7 +31,7 @@ exports.addExpense = async (req, res) => {
 }
 
 exports.getExpense = async (req, res) => {
-    console.log(req.query)
+    // console.log(req.query)
     try {
         const {userEmail} = req.query;
         const expense = await ExpenseSchema.find({userEmail}).sort({createdAt: -1});
@@ -43,7 +43,7 @@ exports.getExpense = async (req, res) => {
 }
 
 exports.deleteExpense = async (req, res) => {
-    console.log(req.params)
+    // console.log(req.params)
     try {
         const expense = await ExpenseSchema.findByIdAndDelete(req.params.id);
         res.status(200).json({msg: 'Expense deleted successfully'});

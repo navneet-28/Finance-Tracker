@@ -1,10 +1,8 @@
-import { styled } from "styled-components";
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from "react";
 import { useGlobalContext } from "./context/globalContext";
 import Login from "./Components/Login/Login";
 import DashboardLayout from "./styles/DashboardLayout";
-import { AuthProvider } from "./hooks/useAuth";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Register from "./Components/Register/Register";
 

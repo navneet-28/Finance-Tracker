@@ -1,5 +1,7 @@
 import axios from 'axios';
-const BASE_URL = 'http://localhost:5000';
+
+const url = process.env.WEBSITE_URL || 'http://localhost';
+const BASE_URL = URL + ':5000';
 
 export default axios.create({
     baseURL: BASE_URL

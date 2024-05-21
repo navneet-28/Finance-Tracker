@@ -9,6 +9,7 @@ require('dotenv').config();
 
 const PORT = process.env.PORT || 5000;
 
+
 const corsOptions = {
     origin: 'http://localhost:3000', // Specify the client origin
     credentials: true, // Enable cookies and other credentials

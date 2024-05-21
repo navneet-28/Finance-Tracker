@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - finance-tracker-app
+name: Build and deploy full stack app to Azure Web App - finance-tracker-app
 
 on:
   push:
@@ -21,20 +21,39 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: npm install, build, and test
+      - name: Build frontend
         run: |
+          cd frontend
+          npm install
+          npm run build
+        working-directory: ./frontend
+
+      - name: Package frontend
+        run: zip -r frontend.zip build
+        working-directory: ./frontend
+
+      - name: Build backend
+        run: |
+          cd backend
           npm install
           npm run build --if-present
           npm run test --if-present
+        working-directory: ./backend
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+      - name: Package backend
+        run: zip -r backend.zip .
+        working-directory: ./backend
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifacts for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: node-app
-          path: release.zip
+          name: frontend
+          path: frontend/frontend.zip
+      - name: Upload backend artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend
+          path: backend/backend.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,29 +62,45 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
-      - name: Download artifact from build job
+      - name: Download frontend artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: node-app
+          name: frontend
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
+      - name: Download backend artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: backend
+
+      - name: Unzip frontend artifact
+        run: unzip frontend.zip -d ./frontend
+
+      - name: Unzip backend artifact
+        run: unzip backend.zip -d ./backend
       
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_55794A4C62FD41C8974AA69801DE1145 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_556BFD0046D342B09A9F7A191D544466 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_50DB20C982D641C8AC4114FBA315AC66 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy backend to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'finance-tracker-app'
           slot-name: 'Production'
-          package: .
+          package: ./backend
+
+      - name: Deploy frontend to Azure Storage
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'finance-tracker-frontend'
+          slot-name: 'Production'
+          package: ./frontend
+
           

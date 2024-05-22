@@ -3,7 +3,7 @@ import axios from 'axios'
 import useAuth from "../hooks/useAuth";
 
 
-const BASE_URL = process.env.WEBSITE_URL + '/' || "https://navneet-finance-1234.fly.dev/";
+const BASE_URL = process.env.WEBSITE_URL + '/api/' || "https://navneet-finance-1234.fly.dev/api/";
 
 
 const GlobalContext = React.createContext()

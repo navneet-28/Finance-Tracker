@@ -1,9 +1,8 @@
 import React, { useContext, useState } from "react"
-import axios from 'axios'
+import axios from '../api/axios'
 import useAuth from "../hooks/useAuth";
 
 
-const BASE_URL = process.env.WEBSITE_URL + '/api/' || "https://navneet-finance-1234.fly.dev/api/";
 
 
 const GlobalContext = React.createContext()
@@ -22,7 +21,7 @@ export const GlobalProvider = ({children}) => {
     //calculate incomes
     const addIncome = async (income) => {
         // console.log(auth)
-        const response = await axios.post(`${BASE_URL}addIncome`, income)
+        const response = await axios.post(`/api/addIncome`, income)
             .catch((err) =>{
                 alert(err.response.data.msg)
             })
@@ -33,7 +32,7 @@ export const GlobalProvider = ({children}) => {
         
     const userEmail = auth.email;
         // console.log("User Email is: ", userEmail)
-        const response = await axios.get(`${BASE_URL}getIncome`, {
+        const response = await axios.get(`/api/getIncome`, {
             params: {
                 userEmail: userEmail
             }
@@ -43,7 +42,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     const deleteIncome = async (id) => {
-        const res  = await axios.delete(`${BASE_URL}deleteIncome/${id}`)
+        const res  = await axios.delete(`/api/deleteIncome/${id}`)
         getIncomes()
     }
 
@@ -60,7 +59,7 @@ export const GlobalProvider = ({children}) => {
     //calculate incomes
     const addExpense = async (income) => {
         
-        const response = await axios.post(`${BASE_URL}addExpense`, income)
+        const response = await axios.post(`/api/addExpense`, income)
             .catch((err) =>{
                 alert(err.response.data.msg)
             })
@@ -71,7 +70,7 @@ export const GlobalProvider = ({children}) => {
         
     const userEmail = auth.email;
         // console.log("User Email is: ", userEmail)
-        const response = await axios.get(`${BASE_URL}getExpense`,{
+        const response = await axios.get(`/api/getExpense`,{
             params: {
                 userEmail: userEmail
             }
@@ -81,7 +80,7 @@ export const GlobalProvider = ({children}) => {
     }
 
     const deleteExpense = async (id) => {
-        const res  = await axios.delete(`${BASE_URL}deleteExpense/${id}`)
+        const res  = await axios.delete(`/api/deleteExpense/${id}`)
         getExpenses()
     }
 
